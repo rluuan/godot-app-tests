@@ -1,0 +1,102 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://Player/Run2.png" type="Texture" id=1]
+[ext_resource path="res://Player.gd" type="Script" id=2]
+[ext_resource path="res://grama.tres" type="TileSet" id=3]
+[ext_resource path="res://Player/Run4.png" type="Texture" id=4]
+[ext_resource path="res://Player/Idle0.png" type="Texture" id=5]
+[ext_resource path="res://Player/Jump1.png" type="Texture" id=6]
+[ext_resource path="res://Player/Run1.png" type="Texture" id=7]
+[ext_resource path="res://Player/Run7.png" type="Texture" id=8]
+[ext_resource path="res://Player/Run0.png" type="Texture" id=9]
+[ext_resource path="res://Player/Run3.png" type="Texture" id=10]
+[ext_resource path="res://back.jpg" type="Texture" id=11]
+[ext_resource path="res://left.png" type="Texture" id=12]
+[ext_resource path="res://right.png" type="Texture" id=13]
+[ext_resource path="res://up.png" type="Texture" id=14]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 5 ) ],
+"loop": true,
+"name": "Idle",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 6 ) ],
+"loop": true,
+"name": "Jump",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 9 ), ExtResource( 7 ), ExtResource( 1 ), ExtResource( 10 ), ExtResource( 4 ), ExtResource( 8 ) ],
+"loop": true,
+"name": "Run",
+"speed": 10.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 5.12486, 9.03977 )
+
+[node name="World" type="Node"]
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2( 1024, 512 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
+scale = Vector2( 2, 1.1875 )
+texture = ExtResource( 11 )
+centered = false
+
+[node name="Player" type="KinematicBody2D" parent="."]
+position = Vector2( 512, 255.58 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Sprite" type="AnimatedSprite" parent="Player"]
+frames = SubResource( 1 )
+animation = "Idle"
+playing = true
+
+[node name="shape" type="CollisionShape2D" parent="Player"]
+position = Vector2( 0, 4.62494 )
+scale = Vector2( 3.16, 3.16 )
+shape = SubResource( 2 )
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+current = true
+zoom = Vector2( 0.8, 0.8 )
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = ExtResource( 3 )
+cell_size = Vector2( 32, 32 )
+format = 1
+tile_data = PoolIntArray( 327700, 0, 0, 327701, 1, 0, 327702, 1, 0, 327703, 1, 0, 327704, 2, 0, 327715, 0, 0, 327716, 1, 0, 327717, 1, 0, 327718, 1, 0, 327719, 1, 0, 327720, 1, 0, 327721, 1, 0, 327722, 1, 0, 327723, 1, 0, 327724, 2, 0, 458781, 0, 0, 458782, 1, 0, 458783, 1, 0, 458784, 1, 0, 458785, 1, 0, 458786, 1, 0, 458787, 2, 0, 655381, 0, 0, 655382, 1, 0, 655383, 1, 0, 655384, 1, 0, 655385, 1, 0, 655386, 1, 0, 655387, 1, 0, 655388, 1, 0, 655389, 2, 0, 851976, 0, 0, 851977, 1, 0, 851978, 1, 0, 851979, 1, 0, 851980, 1, 0, 851981, 1, 0, 851982, 1, 0, 851983, 1, 0, 851984, 1, 0, 851985, 1, 0, 851986, 1, 0, 851987, 1, 0, 851988, 1, 0, 851989, 2, 0 )
+
+[node name="Hud" type="CanvasLayer" parent="."]
+follow_viewport_enable = true
+
+[node name="Gamepad" type="Node2D" parent="Hud"]
+
+[node name="left" type="TouchScreenButton" parent="Hud/Gamepad"]
+position = Vector2( 32, 512 )
+scale = Vector2( 0.125, 0.125 )
+normal = ExtResource( 12 )
+
+[node name="right" type="TouchScreenButton" parent="Hud/Gamepad"]
+position = Vector2( 128, 512 )
+scale = Vector2( 0.125, 0.125 )
+normal = ExtResource( 13 )
+
+[node name="jump" type="TouchScreenButton" parent="Hud/Gamepad"]
+position = Vector2( 928, 512 )
+scale = Vector2( 0.125, 0.125 )
+normal = ExtResource( 14 )
+[connection signal="pressed" from="Hud/Gamepad/left" to="Player" method="_on_left_pressed"]
+[connection signal="released" from="Hud/Gamepad/left" to="Player" method="_on_left_released"]
+[connection signal="pressed" from="Hud/Gamepad/right" to="Player" method="_on_right_pressed"]
+[connection signal="released" from="Hud/Gamepad/right" to="Player" method="_on_right_released"]
+[connection signal="pressed" from="Hud/Gamepad/jump" to="Player" method="_on_jump_pressed"]
+[connection signal="released" from="Hud/Gamepad/jump" to="Player" method="_on_jump_released"]
